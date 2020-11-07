@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Station
 class Station
   attr_accessor :name, :trains
@@ -33,21 +35,18 @@ class Route
   end
 
   def add_station(station)
-    if list.include? station
-      nil
-    else
-      list.insert(-2, station)
-    end
+    return if list.include? station
+
+    list.insert(-2, station)
   end
 
   def del_station(station)
     list.delete(station) if list.include? station
   end
 end
-
 # Train
 class Train
-  attr_accessor :speed, :wagons, :route, :pos, :number, :type
+  attr_accessor :speed, :wagons, :route, :current_station, :number, :type
 
   def initialize(number, type, wagons)
     @speed = 0
@@ -69,50 +68,38 @@ class Train
   end
 
   def del_wagon
-    if self.speed.zero?
-      self.wagons -= 1 if self.wagons.positive?
-    end
+    return unless self.speed.zero? && self.wagons.positive?
+
+    self.wagons -= 1
   end
 
   def new_route(route)
     self.route = route
-    self.pos = route.list[0]
-    pos.get_train(self)
+    self.current_station = route.list[0]
+    current_station.get_train(self)
   end
 
   def go
-    if find_next_station
-      pos.send_train(self)
-      self.pos = route.list[route.list.index(pos) + 1]
-      pos.get_train(self)
-    end
+    return unless next_station
+
+    current_station.send_train(self)
+    self.current_station = next_station
+    current_station.get_train(self)
   end
 
   def back
-    if find_last_station
-      pos.send_train(self)
-      self.pos = route.list[route.list.index(pos) - 1]
-      pos.get_train(self)
-    end
-  end
+    return unless last_station
 
-  def cur_station
-    pos
+    current_station.send_train(self)
+    self.current_station = last_station
+    current_station.get_train(self)
   end
 
   def last_station
-    route.list[route.list.index(pos) - 1] if find_last_station
-  end
-
-  def find_last_station
-    route.list.index(pos) != 0
-  end
-
-  def find_next_station
-    route.list.index(pos) != route.list.length - 1
+    route.list[route.list.index(current_station) - 1] if route.list.index(current_station) != 0
   end
 
   def next_station
-    route.list[route.list.index(pos) + 1] if find_next_station
+    route.list[route.list.index(current_station) + 1] if route.list.index(current_station) != route.list.length - 1
   end
 end
