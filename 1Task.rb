@@ -13,8 +13,8 @@ class Station
 
   def trains_by_type(type)
     filter = trains.select { |trains| trains.type == type }
-    count = filter.length
-    puts "Поездов данного типа: #{count}, #{filter}."
+    filter.length
+    filter
   end
 
   def send_train(train)
@@ -34,22 +34,14 @@ class Route
 
   def add_station(station)
     if list.include? station
-      puts 'Станция уже есть в маршруте!'
+      nil
     else
       list.insert(-2, station)
     end
   end
 
   def del_station(station)
-    if list.include? station
-      if station != first_station && station != last_station
-        list.delete(station)
-      else
-        puts 'Нельзя удалить начальную или конечную станции!'
-      end
-    else
-      puts 'Станции нет в маршруте!'
-    end
+    list.delete(station) if list.include? station
   end
 end
 
@@ -73,20 +65,12 @@ class Train
   end
 
   def add_wagon
-    if self.speed.zero?
-      self.wagons += 1
-    else puts 'Поезд движется!'
-    end
+    self.wagons += 1 if self.speed.zero?
   end
 
   def del_wagon
     if self.speed.zero?
-      if self.wagons.positive?
-        self.wagons -= 1
-      else
-        puts 'Вагонов не осталось!'
-      end
-    else puts 'Поезд движется!'
+      self.wagons -= 1 if self.wagons.positive?
     end
   end
 
@@ -97,46 +81,37 @@ class Train
   end
 
   def go
-    ind = route.list.index(pos)
-    if ind == route.list.length - 1
-      puts 'Поезд на конечной станции!'
-    else
+    if find_next_station
       pos.send_train(self)
-      self.pos = route.list[ind + 1]
+      self.pos = route.list[route.list.index(pos) + 1]
       pos.get_train(self)
     end
   end
 
   def back
-    ind = route.list.index(pos)
-    if ind.zero?
-      puts 'Поезд на начальной станции!'
-    else
-      pos.send_train(self)
-      self.pos = route.list[ind - 1]
-      pos.get_train(self)
-    end
+    find_last_station
+    pos.send_train(self)
+    self.pos = route.list[route.list.index(pos) - 1]
+    pos.get_train(self)
   end
 
   def cur_station
-    puts "Поезд на станции: '#{pos.name}'"
+    pos
   end
 
   def last_station
-    ind = route.list.index(pos)
-    if ind.zero?
-      puts 'Поезд на начальной станции!'
-    else
-      puts "Предыдущая станция: '#{route.list[ind - 1].name}'"
-    end
+    route.list[route.list.index(pos) - 1] if find_last_station
+  end
+
+  def find_last_station
+    route.list.index(pos) != 0
+  end
+
+  def find_next_station
+    route.list.index(pos) != route.list.length - 1
   end
 
   def next_station
-    ind = route.list.index(pos)
-    if ind == route.list.length - 1
-      puts 'Поезд на конечной станции!'
-    else
-      puts "Следующая станция: '#{route.list[ind + 1].name}'"
-    end
+    route.list[route.list.index(pos) + 1] if find_next_station
   end
 end
