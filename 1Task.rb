@@ -89,10 +89,11 @@ class Train
   end
 
   def back
-    find_last_station
-    pos.send_train(self)
-    self.pos = route.list[route.list.index(pos) - 1]
-    pos.get_train(self)
+    if find_last_station
+      pos.send_train(self)
+      self.pos = route.list[route.list.index(pos) - 1]
+      pos.get_train(self)
+    end
   end
 
   def cur_station
