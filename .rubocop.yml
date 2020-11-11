@@ -1,5 +1,6 @@
  AllCops:
     NewCops: enable
+
 Lint/DuplicateRegexpCharacterClassElement: # (new in 1.1)
   Enabled: true
 Lint/EmptyBlock: # (new in 1.1)
