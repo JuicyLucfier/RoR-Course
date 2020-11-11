@@ -1,14 +1,58 @@
 # frozen_string_literal: true
 
+# Station
+class Station
+  attr_accessor :name, :trains
+
+  def initialize(name)
+    @name = name
+    @trains = []
+  end
+
+  def get_train(train)
+    trains.push(train)
+  end
+
+  def trains_by_type(type)
+    filter = trains.select { |trains| trains.type == type }
+    filter.length
+    filter
+  end
+
+  def send_train(train)
+    trains.delete(train)
+  end
+end
+
+# Route
+class Route
+  attr_accessor :first_station, :last_station, :list
+
+  def initialize(first_station, last_station)
+    @first_station = first_station
+    @last_station = last_station
+    @list = [first_station, last_station]
+  end
+
+  def add_station(station)
+    return if list.include? station
+
+    list.insert(-2, station)
+  end
+
+  def del_station(station)
+    list.delete(station) if list.include? station
+  end
+end
 # Train
 class Train
   attr_accessor :speed, :wagons, :route, :current_station, :number, :type
 
-  def initialize(number, type)
+  def initialize(number, type, wagons)
     @speed = 0
     @number = number
     @type = type
-    @wagons = []
+    @wagons = wagons
   end
 
   def accelerate(value)
@@ -19,14 +63,14 @@ class Train
     self.speed = 0
   end
 
-  def add_wagon(wagon)
-    wagons.push(wagon) if self.speed.zero? && wagon.type == type
+  def add_wagon
+    self.wagons += 1 if self.speed.zero?
   end
 
-  def delete_wagon
-    return unless self.speed.zero? && wagons.length.positive?
+  def del_wagon
+    return unless self.speed.zero? && self.wagons.positive?
 
-    wagons.pop
+    self.wagons -= 1
   end
 
   def new_route(route)
