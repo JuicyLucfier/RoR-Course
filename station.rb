@@ -18,8 +18,6 @@ class Station
   end
 
   def trains_by_type(type)
-    filter = trains.select { |trains| trains.type == type }
-    filter.length
-    filter
+    trains.select { |trains| trains.type == type }
   end
 end

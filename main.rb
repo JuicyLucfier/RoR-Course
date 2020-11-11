@@ -132,9 +132,11 @@ class Main
     train = find_train
     return if train.nil?
 
-    if train.type == 'Грузовой'
-      train.add_wagon(WagonCargo.new)
-    else train.add_wagon(WagonPassenger.new)
+    puts 'Введите 1, чтобы добавить грузовой вагон'
+    puts 'Введите 2, чтобы добавить пассажирский вагон'
+    case make_choice
+    when 1 then train.add_wagon(WagonCargo.new)
+    when 2 then train.add_wagon(WagonPassenger.new)
     end
   end
 
@@ -169,7 +171,7 @@ class Main
       show_objects_menu
       show_objects_menu_choice
     when 0
-      abort
+      exit
     end
   end
 

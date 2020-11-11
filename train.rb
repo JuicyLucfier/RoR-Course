@@ -20,7 +20,7 @@ class Train
   end
 
   def add_wagon(wagon)
-    wagons.push(wagon) if self.speed.zero?
+    wagons.push(wagon) if self.speed.zero? && wagon.type == type
   end
 
   def delete_wagon
