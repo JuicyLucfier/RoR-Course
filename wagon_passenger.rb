@@ -4,8 +4,7 @@
 class WagonPassenger < Wagon
   attr_accessor :type
 
-  def initialize
-    @type = 'Пассажирский'
+  def initialize(type = 'Пассажирский')
     super
   end
 end

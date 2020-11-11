@@ -25,12 +25,12 @@ class Main
     end
   end
 
+  # Данные методы проходят внутри одного класса и другие классы не должны знать, как работают эти методы
+  private
+
   def make_choice
     gets.chomp.to_i
   end
-
-  # Данные методы проходят внутри одного класса и другие классы не должны знать, как работают эти методы
-  private
 
   def check_find_station(station_name)
     found = stations.select { |station| station.name == station_name }
@@ -84,7 +84,7 @@ class Main
     when 1 then train = CargoTrain.new(train_number)
     when 2 then train = PassengerTrain.new(train_number)
     end
-    trains.push(train)
+    trains << train
   end
 
   def create_route
@@ -168,7 +168,8 @@ class Main
     when 3
       show_objects_menu
       show_objects_menu_choice
-    when 0 then nil
+    when 0
+      abort
     end
   end
 
@@ -235,6 +236,6 @@ class Main
     station = find_station
     puts station.trains
   end
-
-  Main.new.show_menu
 end
+
+Main.new.show_menu

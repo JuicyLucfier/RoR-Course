@@ -2,11 +2,9 @@
 
 # Passenger train
 class PassengerTrain < Train
-  attr_accessor :type, :number
+  attr_accessor :type
 
   def initialize(number, type = 'Пассажирский')
-    @type = type
-    @number = number
     super
   end
 end
