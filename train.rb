@@ -2,13 +2,18 @@
 
 # Train
 class Train
+  include Company
+  include InstanceCounter
   attr_accessor :speed, :wagons, :route, :current_station, :number, :type
 
+  @@trains = []
   def initialize(number, type)
+    register_instances
     @speed = 0
     @number = number
     @type = type
     @wagons = []
+    @@trains << self
   end
 
   def accelerate(value)
@@ -27,6 +32,11 @@ class Train
     return unless self.speed.zero? && wagons.length.positive?
 
     wagons.pop
+  end
+
+  def self.find(train_number)
+    found = @@trains.select { |train| train.number == train_number }
+    return found[0] unless found.empty?
   end
 
   def new_route(route)

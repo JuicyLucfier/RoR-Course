@@ -2,6 +2,7 @@
 
 # Route
 class Route
+  include InstanceCounter
   attr_accessor :title, :first_station, :last_station, :list
 
   def initialize(first_station, last_station, title)
@@ -9,6 +10,7 @@ class Route
     @last_station = last_station
     @list = [first_station, last_station]
     @title = title
+    register_instances
   end
 
   def add_station(station)
