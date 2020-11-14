@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'Company'
-require_relative 'InstanceCounter'
+require_relative 'company'
+require_relative 'instance_counter'
 require_relative 'station'
 require_relative 'route'
 require_relative 'train'
@@ -87,6 +87,10 @@ class Main
     when 2 then train = PassengerTrain.new(train_number)
     end
     trains << train
+    puts "Поезд с номером '#{train.number}' типа '#{train.type}' успешно создан!"
+  rescue StandardError => e
+    puts e.inspect
+    retry
   end
 
   def create_route
