@@ -78,21 +78,19 @@ class Main
   end
 
   def create_train
-    begin
-      puts 'Введите номер поезда:'
-      train_number = gets.chomp
-      puts 'Введите "1", чтобы выбрать тип поезда "Грузовой"'
-      puts 'Введите "2", чтобы выбрать тип поезда "Пассажирский"'
-      case make_choice
-      when 1 then train = CargoTrain.new(train_number)
-      when 2 then train = PassengerTrain.new(train_number)
-      end
-      trains << train
-      puts "Поезд с номером '#{train.number}' типа '#{train.type}' успешно создан!"
-    rescue => e
-      puts e.inspect
-      retry
+    puts 'Введите номер поезда:'
+    train_number = gets.chomp
+    puts 'Введите "1", чтобы выбрать тип поезда "Грузовой"'
+    puts 'Введите "2", чтобы выбрать тип поезда "Пассажирский"'
+    case make_choice
+    when 1 then train = CargoTrain.new(train_number)
+    when 2 then train = PassengerTrain.new(train_number)
     end
+    trains << train
+    puts "Поезд с номером '#{train.number}' типа '#{train.type}' успешно создан!"
+  rescue StandardError => e
+    puts e.inspect
+    retry
   end
 
   def create_route

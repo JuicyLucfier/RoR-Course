@@ -16,7 +16,7 @@ class Route
 
   def valid?
     valid!
-  rescue
+  rescue StandardError
     false
   end
 
@@ -34,7 +34,7 @@ class Route
 
   def valid!
     raise "Stations and title can't be nil!" if first_station.nil? || last_station.nil? || title.nil?
-    raise "Stations and title must have at least 1 symbol!" if first_station.length == 0||
-    last_station.length == 0 || title.length == 0
+    raise 'Stations and title must have at least 1 symbol!' if first_station.length.zero? ||
+                                                               last_station.length.zero? || title.length.zero?
   end
 end

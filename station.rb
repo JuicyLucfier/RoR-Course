@@ -16,7 +16,7 @@ class Station
 
   def valid?
     valid!
-  rescue
+  rescue StandardError
     false
   end
 
@@ -40,6 +40,6 @@ class Station
 
   def valid!
     raise "Name can't be nil!" if name.nil?
-    raise "Name must have at least 1 symbol!" if name.length == 0 
+    raise 'Name must have at least 1 symbol!' if name.length.zero?
   end
 end
