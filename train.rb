@@ -6,6 +6,8 @@ class Train
   include InstanceCounter
   attr_accessor :speed, :wagons, :route, :current_station, :number, :type
 
+  NUMBER_FORMAT = /^[a-z0-9а-я]{3}-?[a-z0-9а-я]{2}$/i
+
   @@trains = []
   def initialize(number, type)
     register_instances
@@ -14,6 +16,13 @@ class Train
     @type = type
     @wagons = []
     @@trains << self
+    valid!
+  end
+
+  def valid?
+    valid!
+  rescue
+     false
   end
 
   def accelerate(value)
@@ -67,5 +76,13 @@ class Train
 
   def next_station
     route.list[route.list.index(current_station) + 1] if route.list.index(current_station) != route.list.length - 1
+  end
+
+  protected
+  def valid!
+    raise "Number can't be nil!" if number.nil?
+    raise "Type can't be nil!" if type.nil?
+    raise "Number and type must have at least 1 symbol!" if self.number.length == 0 || self.type.length == 0
+    raise "Number has invalid format!" if number !~ NUMBER_FORMAT
   end
 end

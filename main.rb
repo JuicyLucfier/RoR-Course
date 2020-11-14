@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'Company'
-require_relative 'InstanceCounter'
+require_relative 'company'
+require_relative 'instance_counter'
 require_relative 'station'
 require_relative 'route'
 require_relative 'train'
@@ -78,15 +78,21 @@ class Main
   end
 
   def create_train
-    puts 'Введите номер поезда:'
-    train_number = gets.chomp
-    puts 'Введите "1", чтобы выбрать тип поезда "Грузовой"'
-    puts 'Введите "2", чтобы выбрать тип поезда "Пассажирский"'
-    case make_choice
-    when 1 then train = CargoTrain.new(train_number)
-    when 2 then train = PassengerTrain.new(train_number)
+    begin
+      puts 'Введите номер поезда:'
+      train_number = gets.chomp
+      puts 'Введите "1", чтобы выбрать тип поезда "Грузовой"'
+      puts 'Введите "2", чтобы выбрать тип поезда "Пассажирский"'
+      case make_choice
+      when 1 then train = CargoTrain.new(train_number)
+      when 2 then train = PassengerTrain.new(train_number)
+      end
+      trains << train
+      puts "Поезд с номером '#{train.number}' типа '#{train.type}' успешно создан!"
+    rescue => e
+      puts e.inspect
+      retry
     end
-    trains << train
   end
 
   def create_route

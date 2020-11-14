@@ -11,6 +11,13 @@ class Route
     @list = [first_station, last_station]
     @title = title
     register_instances
+    valid!
+  end
+
+  def valid?
+    valid!
+  rescue
+    false
   end
 
   def add_station(station)
@@ -21,5 +28,13 @@ class Route
 
   def del_station(station)
     list.delete(station) if list.include? station
+  end
+
+  protected
+
+  def valid!
+    raise "Stations and title can't be nil!" if first_station.nil? || last_station.nil? || title.nil?
+    raise "Stations and title must have at least 1 symbol!" if first_station.length == 0||
+    last_station.length == 0 || title.length == 0
   end
 end

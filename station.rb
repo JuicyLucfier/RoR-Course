@@ -11,6 +11,13 @@ class Station
     @trains = []
     @@stations << self
     register_instances
+    valid!
+  end
+
+  def valid?
+    valid!
+  rescue
+    false
   end
 
   def get_train(train)
@@ -27,5 +34,12 @@ class Station
 
   def self.all
     @@stations
+  end
+
+  protected
+
+  def valid!
+    raise "Name can't be nil!" if name.nil?
+    raise "Name must have at least 1 symbol!" if name.length == 0 
   end
 end
