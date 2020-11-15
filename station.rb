@@ -36,6 +36,11 @@ class Station
     @@stations
   end
 
+  def trains_block
+    block = ->(train) { puts train }
+    block.call(trains)
+  end
+
   protected
 
   def valid!

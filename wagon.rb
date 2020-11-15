@@ -3,9 +3,9 @@
 # Wagon
 class Wagon
   include Company
-  attr_accessor :type
+  attr_accessor :type, :amount
 
-  def initialize(type)
+  def initialize(_amount, type)
     @type = type
     valid!
   end

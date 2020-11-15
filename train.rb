@@ -25,6 +25,11 @@ class Train
     false
   end
 
+  def wagons_block
+    block = ->(wagon) { puts wagon }
+    block.call(wagons)
+  end
+
   def accelerate(value)
     self.speed += value
   end
