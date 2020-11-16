@@ -25,6 +25,10 @@ class Train
     false
   end
 
+  def wagons_block
+    yield(wagons) if block_given?
+  end
+
   def accelerate(value)
     self.speed += value
   end

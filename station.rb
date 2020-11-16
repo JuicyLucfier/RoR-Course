@@ -36,6 +36,10 @@ class Station
     @@stations
   end
 
+  def trains_block
+    yield(trains) if block_given?
+  end
+
   protected
 
   def valid!

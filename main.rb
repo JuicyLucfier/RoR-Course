@@ -72,6 +72,13 @@ class Main
     check_find_route(route_title)
   end
 
+  def find_wagon(train)
+    return if train.nil?
+
+    train.wagons.each { |wagon| puts "Введите '#{train.wagons.index(wagon) + 1}', чтобы выбрать вагон #{wagon}" }
+    train.wagons[make_choice - 1]
+  end
+
   def create_station
     puts 'Введите название станции:'
     stations << Station.new(gets.chomp)
@@ -138,11 +145,15 @@ class Main
     train = find_train
     return if train.nil?
 
-    puts 'Введите 1, чтобы добавить грузовой вагон'
-    puts 'Введите 2, чтобы добавить пассажирский вагон'
+    puts 'Введите "1", чтобы добавить грузовой вагон'
+    puts 'Введите "2", чтобы добавить пассажирский вагон'
     case make_choice
-    when 1 then train.add_wagon(WagonCargo.new)
-    when 2 then train.add_wagon(WagonPassenger.new)
+    when 1
+      puts 'Введите объем вагона:'
+      train.add_wagon(WagonCargo.new(make_choice))
+    when 2
+      puts 'Введите кол-во мест в вагоне:'
+      train.add_wagon(WagonPassenger.new(make_choice))
     end
   end
 
@@ -159,6 +170,23 @@ class Main
   def train_back
     train = find_train
     train.back
+  end
+
+  def wagon_take_a_seat
+    train = find_train
+    wagon = find_wagon(train)
+    return if train.nil? || wagon.nil? || train.type != wagon.type
+
+    wagon.take_a_seat
+  end
+
+  def wagon_take_volume
+    train = find_train
+    wagon = find_wagon(train)
+    return if train.nil? || wagon.nil? || train.type != wagon.type
+
+    puts 'Введите кол-во объема, которое требуется занять:'
+    wagon.take_volume(make_choice)
   end
 
   # Эти методы позволяют увидеть "внешнюю" оболочку класса
@@ -198,6 +226,8 @@ class Main
     when 5 then delete_wagon
     when 6 then train_go
     when 7 then train_back
+    when 8 then wagon_take_a_seat
+    when 9 then wagon_take_volume
     end
   end
 
@@ -205,6 +235,7 @@ class Main
     case make_choice
     when 1 then puts stations
     when 2 then show_trains_on_station
+    when 3 then show_wagons
     end
   end
 
@@ -230,19 +261,33 @@ class Main
     puts "Введите '5', если вы хотите отцепить вагон от поезда"
     puts "Введите '6', если вы хотите переместить поезд по маршруту вперед"
     puts "Введите '7', если вы хотите переместить поезд по маршруту назад"
+    puts "Введите '8', если вы хотите занять место в вагоне"
+    puts "Введите '9', если вы хотите занять объем в вагоне"
     puts "Введите '0', если вы хотите вернуться назад к меню"
   end
 
   def show_objects_menu
     puts "Введите '1', если вы хотите вывести список станций"
     puts "Введите '2', если вы хотите вывести список поездов на станции"
+    puts "Введите '3', если вы хотите вывести список вагонов у поезда"
     puts "Введите '0', если вы хотите вернуться назад к меню"
   end
 
   def show_trains_on_station
     puts 'Введите название станции:'
     station = find_station
-    puts station.trains
+    return if station.nil?
+
+    # Добавил здесь puts, т.к. иначе ничего не выводит
+    station.trains_block { |train| puts train }
+  end
+
+  def show_wagons
+    train = find_train
+    return if train.nil?
+
+    # И тут
+    train.wagons_block { |wagon| puts wagon }
   end
 end
 
