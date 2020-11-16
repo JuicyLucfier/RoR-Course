@@ -26,8 +26,7 @@ class Train
   end
 
   def wagons_block
-    block = ->(wagon) { puts wagon }
-    block.call(wagons)
+    yield(wagons) if block_given?
   end
 
   def accelerate(value)

@@ -278,14 +278,16 @@ class Main
     station = find_station
     return if station.nil?
 
-    station.trains_block
+    # Добавил здесь puts, т.к. иначе ничего не выводит
+    station.trains_block { |train| puts train }
   end
 
   def show_wagons
     train = find_train
     return if train.nil?
 
-    train.wagons_block
+    # И тут
+    train.wagons_block { |wagon| puts wagon }
   end
 end
 

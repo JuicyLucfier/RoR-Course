@@ -37,8 +37,7 @@ class Station
   end
 
   def trains_block
-    block = ->(train) { puts train }
-    block.call(trains)
+    yield(trains) if block_given?
   end
 
   protected
