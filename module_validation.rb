@@ -18,7 +18,8 @@ module Validation
   module InstanceMethods
     def validate!
       self.class.instance_variable_get('@validate_name').each do |name, args|
-        send("validate_#{args[0]}", name, *args[1..args.length])
+        var_name = instance_variable_get("@#{name}")
+        send("validate_#{args[0]}", var_name, *args[1..args.length])
       end
     end
 
@@ -30,19 +31,16 @@ module Validation
 
     private
 
-    def validate_presence(name)
-      value = instance_variable_get("@#{name}")
-      raise "Attribute's value is nil or empty string!" if value.nil? || value.empty?
+    def validate_presence(var_name)
+      raise "Attribute's value is nil or empty string!" if var_name.nil? || var_name.empty?
     end
 
-    def validate_format(name, format)
-      value = instance_variable_get("@#{name}")
-      raise 'Invalid value!' if value !~ format
+    def validate_format(var_name, format)
+      raise 'Invalid value!' if var_name !~ format
     end
 
-    def validate_type(name, type)
-      class_type = instance_variable_get("@#{name}")
-      raise 'Invalid type!' if class_type != type
+    def validate_type(var_name, type)
+      raise 'Invalid type!' if var_name != type
     end
   end
 end
