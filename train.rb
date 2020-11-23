@@ -4,25 +4,32 @@
 class Train
   include Company
   include InstanceCounter
-  attr_accessor :speed, :wagons, :route, :current_station, :number, :type
+  include Validation
+  extend Accessors
+
+  attr_accessor_with_history :q, :w
+  strong_attr_accessor :a, Integer
+
+  attr_accessor :speed, :wagons, :route, :current_station, :name, :type, :class_type
 
   NUMBER_FORMAT = /^[a-z0-9а-я]{3}-?[a-z0-9а-я]{2}$/i.freeze
 
   @@trains = []
-  def initialize(number, type)
+
+  # Проверка
+  validate :name, :presence
+  validate :name, :format, NUMBER_FORMAT
+  validate :class_type, :type, Train
+  def initialize(name, type)
     register_instances
+
     @speed = 0
-    @number = number
+    @name = name
     @type = type
     @wagons = []
     @@trains << self
-    valid!
-  end
-
-  def valid?
-    valid!
-  rescue StandardError
-    false
+    @class_type = self.class
+    validate!
   end
 
   def wagons_block
@@ -47,8 +54,8 @@ class Train
     wagons.pop
   end
 
-  def self.find(train_number)
-    found = @@trains.select { |train| train.number == train_number }
+  def self.find(train_name)
+    found = @@trains.select { |train| train.number == train_name }
     return found[0] unless found.empty?
   end
 
@@ -82,12 +89,12 @@ class Train
     route.list[route.list.index(current_station) + 1] if route.list.index(current_station) != route.list.length - 1
   end
 
-  protected
-
-  def valid!
-    raise "Number can't be nil!" if number.nil?
-    raise "Type can't be nil!" if type.nil?
-    raise 'Number and type must have at least 1 symbol!' if number.length.zero? || type.length.zero?
-    raise 'Number has invalid format!' if number !~ NUMBER_FORMAT
-  end
+  # protected
+  #
+  # def valid!
+  #   raise "Number can't be nil!" if number.nil?
+  #   raise "Type can't be nil!" if type.nil?
+  #   raise 'Number and type must have at least 1 symbol!' if number.length.zero? || type.length.zero?
+  #   raise 'Number has invalid format!' if number !~ NUMBER_FORMAT
+  # end
 end

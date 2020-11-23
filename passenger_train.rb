@@ -4,7 +4,7 @@
 class PassengerTrain < Train
   attr_accessor :type
 
-  def initialize(number, type = 'Пассажирский')
+  def initialize(name, type = 'Пассажирский')
     super
   end
 end

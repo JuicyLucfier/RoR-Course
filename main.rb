@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'company'
-require_relative 'instance_counter'
+require_relative 'module_company'
+require_relative 'module_instance_counter'
 require_relative 'station'
 require_relative 'route'
 require_relative 'train'
@@ -39,8 +39,8 @@ class Main
     return found[0] unless found.empty?
   end
 
-  def check_find_train(train_number)
-    found = trains.select { |train| train.number == train_number }
+  def check_find_train(train_name)
+    found = trains.select { |train| train.name == train_name }
     return found[0] unless found.empty?
   end
 
@@ -58,10 +58,10 @@ class Main
 
   def find_train
     puts 'Введите номер поезда:'
-    train_number = gets.chomp
-    return unless check_find_train(train_number)
+    train_name = gets.chomp
+    return unless check_find_train(train_name)
 
-    check_find_train(train_number)
+    check_find_train(train_name)
   end
 
   def find_route
@@ -86,15 +86,15 @@ class Main
 
   def create_train
     puts 'Введите номер поезда:'
-    train_number = gets.chomp
+    train_name = gets.chomp
     puts 'Введите "1", чтобы выбрать тип поезда "Грузовой"'
     puts 'Введите "2", чтобы выбрать тип поезда "Пассажирский"'
     case make_choice
-    when 1 then train = CargoTrain.new(train_number)
-    when 2 then train = PassengerTrain.new(train_number)
+    when 1 then train = CargoTrain.new(train_name)
+    when 2 then train = PassengerTrain.new(train_name)
     end
     trains << train
-    puts "Поезд с номером '#{train.number}' типа '#{train.type}' успешно создан!"
+    puts "Поезд с номером '#{train.name}' типа '#{train.type}' успешно создан!"
   rescue StandardError => e
     puts e.inspect
     retry
